@@ -1,0 +1,5 @@
+Hello Arjun
+This is a file writing test
+Day 3 learning is going great!
+Appending this line...
+File handling is easy!
