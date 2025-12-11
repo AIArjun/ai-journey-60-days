@@ -4,8 +4,11 @@ import os
 TASKS_FILE = os.path.join("day3", "tasks.json")
 
 if os.path.exists(TASKS_FILE):
-    with open(TASKS_FILE, "r") as f:
-        tasks = json.load(f)
+    try:
+        with open(TASKS_FILE, "r") as f:
+            tasks = json.load(f)
+    except FileNotFoundError:
+            tasks = []
 else:
     tasks = []
     print("Loaded tasks:", tasks)
