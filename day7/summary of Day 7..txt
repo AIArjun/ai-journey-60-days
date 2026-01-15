@@ -1,0 +1,21 @@
+DAY 7 — The Merger: Connecting API to Database
+
+🎯 Goal Connect the "Brain" (FastAPI) to the "Memory" (SQL Database) so that data survives server restarts.
+
+🔹 Key Concepts Learned
+
+The Request-Response Lifecycle: We open a database connection for each request and close it immediately after.
+
+Dependency Injection (Depends): The "Butler" pattern. We use a function (get_session) to hand the database connection to our API endpoints automatically.
+
+Lifespan Events: How to run startup code (like creating tables) automatically when the server launches.
+
+🔹 Code Accomplishments
+
+Created day7_app.py combining FastAPI and SQLModel.
+
+Built the get_session generator with yield to safely manage connections.
+
+Refactored POST to save to disk (session.add, session.commit).
+
+Refactored GET to read from disk (session.exec, select).
