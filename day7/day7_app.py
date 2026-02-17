@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
 from typing import Optional
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException  # <--- Added HTTPException
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 
 # --- PART 1: DATABASE SETUP ---
@@ -54,3 +54,25 @@ def read_heroes(session: Session = Depends(get_session)):
 @app.get("/")  # <--- FIXED: Added the missing decorator!
 def root():
     return {"message": "Welcome to the Hero API (Day 7)", "db_status": "Connected"}
+
+# --- DAY 8: UPDATE (PUT) ---
+@app.put("/heroes/{hero_id}")
+def update_hero(hero_id: int, hero_data: Hero, session: Session = Depends(get_session)):
+    # 1. FIND: Get the hero from the DB
+    hero_db = session.get(Hero, hero_id)
+    
+    # 2. CHECK: If hero doesn't exist, stop!
+    if not hero_db:
+        raise HTTPException(status_code=404, detail="Hero not found")
+    
+    # 3. MODIFY: Update the fields
+    hero_db.name = hero_data.name
+    hero_db.secret_name = hero_data.secret_name
+    hero_db.age = hero_data.age
+    
+    # 4. COMMIT: Save to disk
+    session.add(hero_db)
+    session.commit()
+    session.refresh(hero_db)
+    
+    return hero_db
