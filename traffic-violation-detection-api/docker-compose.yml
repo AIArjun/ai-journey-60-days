@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+  traffic-api:
+    build: .
+    container_name: traffic-violation-api
+    ports:
+      - "8000:8000"
+    environment:
+      - MODEL_PATH=${MODEL_PATH:-}
+      - DEVICE=cpu
+      - LOG_LEVEL=INFO
+      - DEFAULT_CONFIDENCE=0.5
+    volumes:
+      - ./models:/app/models
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
